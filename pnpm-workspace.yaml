@@ -1,4 +1,7 @@
-packages: [.]
+packages:
+  - app
+  - server
+
 onlyBuiltDependencies:
   - esbuild
   - lefthook

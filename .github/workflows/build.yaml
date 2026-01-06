@@ -19,16 +19,18 @@ jobs:
         run: pnpm install
 
       - name: Check Types
-        run: pnpm tsc
+        run: pnpm --recursive exec tsc
 
       - name: Test Project
-        run: pnpm test
+        run: pnpm --recursive test
 
       - name: Check Formatting
-        run: pnpm prettier --check .
+        run: |
+          pnpm prettier --check .
+          pnpm --recursive exec prettier --check .
 
       - name: Check Lint
-        run: pnpm eslint
+        run: pnpm --recursive exec eslint
 
       - name: Build Project
-        run: pnpm tsc --project tsconfig.build.json
+        run: pnpm --recursive build
