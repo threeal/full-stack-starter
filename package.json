@@ -1,33 +1,9 @@
 {
-  "name": "my_fibonacci",
-  "version": "0.0.0",
-  "description": "A sample Node.js project",
-  "keywords": [
-    "sample",
-    "fibonacci"
-  ],
-  "homepage": "https://github.com/threeal/nodejs-starter#readme",
-  "bugs": {
-    "url": "https://github.com/threeal/nodejs-starter/issues",
-    "email": "alfi.maulana.f@gmail.com"
-  },
-  "repository": "github:threeal/nodejs-starter",
-  "license": "Unlicense",
-  "author": "Alfi Maulana <alfi.maulana.f@gmail.com>",
+  "name": "root",
+  "private": true,
   "type": "module",
-  "main": "dist/lib.js",
-  "types": "dist/lib.d.ts",
-  "bin": "dist/bin.js",
-  "files": [
-    "dist"
-  ],
   "scripts": {
-    "prepack": "tsc -p tsconfig.build.json",
-    "start": "jiti src/bin.ts",
     "test": "vitest run"
-  },
-  "dependencies": {
-    "commander": "^14.0.2"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.2",
@@ -35,7 +11,6 @@
     "@types/node": "^25.0.3",
     "@vitest/coverage-v8": "^4.0.15",
     "eslint": "^9.39.2",
-    "jiti": "^2.6.1",
     "lefthook": "^2.0.13",
     "prettier": "^3.7.4",
     "prettier-plugin-organize-imports": "^4.3.0",

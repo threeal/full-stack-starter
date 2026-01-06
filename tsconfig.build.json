@@ -3,7 +3,6 @@
   "include": ["src"],
   "exclude": ["**/*.test.*"],
   "compilerOptions": {
-    "declaration": true,
     "outDir": "dist"
   }
 }
