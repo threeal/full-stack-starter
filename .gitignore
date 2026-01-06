@@ -1,0 +1,9 @@
+.*
+!.git*
+!.npmrc
+!.prettier*
+
+dist/
+node_modules/
+
+*.tgz
