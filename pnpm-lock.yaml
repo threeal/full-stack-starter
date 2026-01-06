@@ -7,10 +7,6 @@ settings:
 importers:
 
   .:
-    dependencies:
-      commander:
-        specifier: ^14.0.2
-        version: 14.0.2
     devDependencies:
       '@eslint/js':
         specifier: ^9.39.2
@@ -27,9 +23,6 @@ importers:
       eslint:
         specifier: ^9.39.2
         version: 9.39.2(jiti@2.6.1)
-      jiti:
-        specifier: ^2.6.1
-        version: 2.6.1
       lefthook:
         specifier: ^2.0.13
         version: 2.0.13
@@ -560,10 +553,6 @@ packages:
 
   color-name@1.1.4:
     resolution: {integrity: sha512-dOy+3AuW3a2wNbZHIuMZpTcgjGuLU/uBL/ubcZF9OXbDo8ff4O8yVp5Bf0efS8uEoYo5q4Fx7dY9OgQGXgAsQA==}
-
-  commander@14.0.2:
-    resolution: {integrity: sha512-TywoWNNRbhoD0BXs1P3ZEScW8W5iKrnbithIl0YH+uCmBd0QpPOA8yc82DS3BIE5Ma6FnBVUsJ7wVUDz4dvOWQ==}
-    engines: {node: '>=20'}
 
   concat-map@0.0.1:
     resolution: {integrity: sha512-/Srv4dswyQNBfohGpz9o6Yb3Gz3SrUDqBH5rTuhGR7ahtlbYKnVxw2bCFMRljaA7EXHaXZ8wsHdodFvbkhKmqg==}
@@ -1540,8 +1529,6 @@ snapshots:
 
   color-name@1.1.4: {}
 
-  commander@14.0.2: {}
-
   concat-map@0.0.1: {}
 
   cross-spawn@7.0.6:
@@ -1741,7 +1728,8 @@ snapshots:
       html-escaper: 2.0.2
       istanbul-lib-report: 3.0.1
 
-  jiti@2.6.1: {}
+  jiti@2.6.1:
+    optional: true
 
   js-tokens@9.0.1: {}
 
