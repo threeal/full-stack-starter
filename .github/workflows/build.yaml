@@ -33,4 +33,4 @@ jobs:
         run: pnpm --recursive exec eslint
 
       - name: Build Project
-        run: pnpm --filter server exec tsc --project tsconfig.build.json
+        run: pnpm --recursive build
