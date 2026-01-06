@@ -1,24 +1,20 @@
 #!/usr/bin/env node
 
-import * as fs from "node:fs";
 import * as http from "node:http";
-import * as path from "node:path";
+import { handleStaticFile } from "./handlers.js";
+
+const publicDir = process.env.PUBLIC_DIR;
+if (!publicDir) {
+  console.warn("PUBLIC_DIR is not set. Static file handling is disabled.");
+}
 
 const server = http.createServer((req, res) => {
-  const filePath = (req.url === "/" ? null : req.url) ?? "/index.html";
-  const contentType =
-    path.extname(filePath) === ".html" ? "text/html" : "text/plain";
-
-  fs.readFile(path.join("public", filePath), (err, data) => {
-    if (err) {
-      res.writeHead(404, { "Content-Type": "text/plain" });
-      res.end("404 Not Found");
-      return;
-    }
-
-    res.writeHead(200, { "Content-Type": contentType });
-    res.end(data);
-  });
+  if (publicDir) {
+    handleStaticFile(publicDir, req, res);
+  } else {
+    res.writeHead(501, { "Content-Type": "text/plain" });
+    res.end("501 Not Implemented");
+  }
 });
 
 server.listen(3000, () => {
