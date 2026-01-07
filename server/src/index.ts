@@ -2,6 +2,7 @@
 
 import * as http from "node:http";
 import { handleStaticFile } from "./handlers.js";
+import { httpServerListenToAnyPort } from "./server.js";
 
 const publicDir = process.env.PUBLIC_DIR;
 if (!publicDir) {
@@ -17,6 +18,5 @@ const server = http.createServer((req, res) => {
   }
 });
 
-server.listen(3000, () => {
-  console.log(`Server running at http://localhost:3000`);
-});
+const port = await httpServerListenToAnyPort(server);
+console.log(`Server running at http://localhost:${port.toString()}`);
