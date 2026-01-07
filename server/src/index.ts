@@ -1,22 +1,20 @@
-#!/usr/bin/env node
+import fastifyStatic from "@fastify/static";
+import Fastify from "fastify";
 
-import * as http from "node:http";
-import { handleStaticFile } from "./handlers.js";
-import { httpServerListenToAnyPort } from "./server.js";
+const fastify = Fastify({ logger: true });
 
-const publicDir = process.env.PUBLIC_DIR;
-if (!publicDir) {
-  console.warn("PUBLIC_DIR is not set. Static file handling is disabled.");
+if (process.env.PUBLIC_DIR) {
+  fastify.register(fastifyStatic, {
+    root: process.env.PUBLIC_DIR,
+    prefix: "/",
+  });
+} else {
+  fastify.log.warn("PUBLIC_DIR is not set. Static file handling is disabled.");
 }
 
-const server = http.createServer((req, res) => {
-  if (publicDir) {
-    handleStaticFile(publicDir, req, res);
-  } else {
-    res.writeHead(501, { "Content-Type": "text/plain" });
-    res.end("501 Not Implemented");
-  }
-});
-
-const port = await httpServerListenToAnyPort(server);
-console.log(`Server running at http://localhost:${port.toString()}`);
+try {
+  await fastify.listen();
+} catch (err) {
+  fastify.log.error(err);
+  process.exitCode = 1;
+}
