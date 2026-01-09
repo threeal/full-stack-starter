@@ -4,7 +4,7 @@
   "type": "module",
   "scripts": {
     "build": "tsc --project tsconfig.build.json",
-    "test": "vitest run --passWithNoTests"
+    "test": "vitest run"
   },
   "dependencies": {
     "@fastify/static": "^9.0.0",
