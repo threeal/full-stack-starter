@@ -2,6 +2,6 @@ packages:
   - app
   - server
 
-onlyBuiltDependencies:
-  - esbuild
-  - lefthook
+allowBuilds:
+  esbuild: true
+  lefthook: true
