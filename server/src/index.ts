@@ -1,16 +1,13 @@
-import fastifyStatic from "@fastify/static";
+import fastifyCors from "@fastify/cors";
 import Fastify from "fastify";
 
 const fastify = Fastify({ logger: true });
 
-if (process.env.PUBLIC_DIR) {
-  fastify.register(fastifyStatic, {
-    root: process.env.PUBLIC_DIR,
-    prefix: "/",
-  });
-} else {
-  fastify.log.warn("PUBLIC_DIR is not set. Static file handling is disabled.");
-}
+await fastify.register(fastifyCors, { origin: true });
+
+fastify.get("/ping", () => {
+  return { message: "pong" };
+});
 
 try {
   await fastify.listen();

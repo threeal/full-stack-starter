@@ -21,7 +21,8 @@ body {
   min-height: 100vh;
 }
 
-button {
+button,
+input {
   transition: border-color 0.25s;
   cursor: pointer;
   border: 1px solid transparent;
@@ -32,12 +33,20 @@ button {
   font-size: 1em;
   font-family: inherit;
 }
-button:hover {
+button:hover,
+input:hover {
   border-color: #646cff;
 }
 button:focus,
-button:focus-visible {
+button:focus-visible,
+input:focus,
+input:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
+}
+button:disabled,
+input:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 @media (prefers-color-scheme: light) {
@@ -45,7 +54,8 @@ button:focus-visible {
     background-color: #ffffff;
     color: #213547;
   }
-  button {
+  button,
+  input {
     background-color: #f9f9f9;
   }
 }
