@@ -1,5 +1,6 @@
 import fastifyStatic from "@fastify/static";
 import Fastify from "fastify";
+import { apiRoutes } from "./api.js";
 
 const fastify = Fastify({ logger: true });
 
@@ -11,6 +12,8 @@ if (process.env.PUBLIC_DIR) {
 } else {
   fastify.log.warn("PUBLIC_DIR is not set. Static file handling is disabled.");
 }
+
+fastify.register(apiRoutes);
 
 try {
   await fastify.listen();
