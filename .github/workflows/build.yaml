@@ -17,22 +17,14 @@ jobs:
         with:
           version: 10.33.4
 
-      - name: Install Dependencies
-        run: pnpm install
+      - name: Setup Lefthook
+        uses: threeal/setup-lefthook-action@v1.1.0
 
-      - name: Check Types
-        run: pnpm --recursive exec tsc
+      - name: Check Pre-commit Hook
+        run: lefthook run pre-commit --all-files
 
       - name: Test Project
         run: pnpm --recursive test
-
-      - name: Check Formatting
-        run: |
-          pnpm prettier --check .
-          pnpm --recursive exec prettier --check .
-
-      - name: Check Lint
-        run: pnpm --recursive exec eslint
 
       - name: Build Project
         run: pnpm --recursive build
