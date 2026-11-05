@@ -9,6 +9,9 @@ pre-commit:
     - name: check types
       run: pnpm --recursive exec tsc
 
+    - name: fix lint
+      run: pnpm --recursive exec eslint --fix
+
     - name: fix formatting
       group:
         parallel: true
@@ -18,6 +21,3 @@ pre-commit:
 
           - name: subprojects
             run: pnpm --recursive exec prettier --write .
-
-    - name: fix lint
-      run: pnpm --recursive exec eslint --fix
