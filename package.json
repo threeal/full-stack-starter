@@ -5,11 +5,15 @@
     "prettier": "^3.7.4"
   },
   "devEngines": {
+    "packageManager": {
+      "name": "pnpm",
+      "version": "^11.28.11",
+      "onFail": "download"
+    },
     "runtime": {
       "name": "node",
       "version": "^24.20.0",
       "onFail": "download"
     }
-  },
-  "packageManager": "pnpm@11.28.11"
+  }
 }
