@@ -1,15 +1,15 @@
-name: Build
+name: CI
 on:
   workflow_dispatch:
   pull_request:
   push:
     branches: [main]
 jobs:
-  build-project:
-    name: Build Project
+  build:
+    name: Build
     runs-on: ubuntu-24.04
     steps:
-      - name: Checkout Project
+      - name: Checkout
         uses: actions/checkout@v6.0.1
 
       - name: Setup pnpm
@@ -18,11 +18,11 @@ jobs:
       - name: Setup Lefthook
         uses: threeal/setup-lefthook-action@v1.1.0
 
-      - name: Check Pre-commit Hook
+      - name: Check pre-commit hook
         run: lefthook run pre-commit --all-files
 
-      - name: Test Project
+      - name: Test
         run: pnpm --recursive test
 
-      - name: Build Project
+      - name: Build
         run: pnpm --recursive build
