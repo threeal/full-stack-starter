@@ -8,6 +8,7 @@ if (process.env.PUBLIC_DIR) {
     root: process.env.PUBLIC_DIR,
     prefix: "/",
   });
+  fastify.setNotFoundHandler((_request, reply) => reply.sendFile("index.html"));
 } else {
   fastify.log.warn("PUBLIC_DIR is not set. Static file handling is disabled.");
 }
