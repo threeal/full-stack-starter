@@ -179,11 +179,11 @@ importers:
         specifier: ^19.2.3
         version: 19.2.3
       react-dom:
-        specifier: ^19.2.3
-        version: 19.2.3(react@19.2.3)
+        specifier: ^19.3.1
+        version: 19.3.1(react@19.2.3)
       react-router:
         specifier: ^8.5.1
-        version: 8.5.1(@types/react-dom@19.1.6(@types/react@19.2.7))(@types/react@19.2.7)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
+        version: 8.5.1(@types/react-dom@19.3.0(@types/react@19.2.7))(@types/react@19.2.7)(react-dom@19.3.1(react@19.2.3))(react@19.2.3)
     devDependencies:
       '@eslint-react/eslint-plugin':
         specifier: ^5.30.1
@@ -201,8 +201,8 @@ importers:
         specifier: ^19.2.7
         version: 19.2.7
       '@types/react-dom':
-        specifier: ^19.1.6
-        version: 19.1.6(@types/react@19.2.7)
+        specifier: ^19.3.0
+        version: 19.3.0(@types/react@19.2.7)
       '@vitejs/plugin-react':
         specifier: ^5.1.2
         version: 5.1.2(supports-color@7.2.0)(vite@7.3.0(@types/node@25.0.3)(jiti@2.6.1))
@@ -211,7 +211,7 @@ importers:
         version: 4.0.15(playwright@1.57.0)(vite@7.3.0(@types/node@25.0.3)(jiti@2.6.1))(vitest@4.0.15)
       '@vitest/coverage-v8':
         specifier: ^4.0.15
-        version: 4.0.15(@vitest/browser@4.0.15(vite@7.3.0(@types/node@25.0.3)(jiti@2.6.1))(vitest@4.0.15))(supports-color@7.2.0)(vitest@4.0.15)
+        version: 4.0.15(@vitest/browser@4.0.15(vite@7.3.0(@types/node@25.0.3)(jiti@2.6.1))(vitest@4.0.15))(supports-color@7.2.0)(vite@7.3.0(@types/node@25.0.3)(jiti@2.6.1))(vitest@4.0.15)
       eslint:
         specifier: ^9.39.2
         version: 9.39.2(jiti@2.6.1)(supports-color@7.2.0)
@@ -241,10 +241,10 @@ importers:
         version: 7.3.0(@types/node@25.0.3)(jiti@2.6.1)
       vitest:
         specifier: ^4.0.15
-        version: 4.0.15(@types/node@25.0.3)(@vitest/browser-playwright@4.0.15)(jiti@2.6.1)
+        version: 4.0.15(@types/node@25.0.3)(@vitest/browser-playwright@4.0.15)(jiti@2.6.1)(vite@7.3.0(@types/node@25.0.3)(jiti@2.6.1))
       vitest-browser-react:
         specifier: ^2.0.2
-        version: 2.0.2(@types/react-dom@19.1.6(@types/react@19.2.7))(@types/react@19.2.7)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(vitest@4.0.15)
+        version: 2.0.2(@types/react-dom@19.3.0(@types/react@19.2.7))(@types/react@19.2.7)(react-dom@19.3.1(react@19.2.3))(react@19.2.3)(vite@7.3.0(@types/node@25.0.3)(jiti@2.6.1))(vitest@4.0.15)
 
   server:
     dependencies:
@@ -269,7 +269,7 @@ importers:
         version: 25.0.3
       '@vitest/coverage-v8':
         specifier: ^4.0.15
-        version: 4.0.15(@vitest/browser@4.0.15(vite@7.3.0(@types/node@25.0.3)(jiti@2.6.1))(vitest@4.0.15))(supports-color@7.2.0)(vitest@4.0.15)
+        version: 4.0.15(@vitest/browser@4.0.15(vite@7.3.0(@types/node@25.0.3)(jiti@2.6.1))(vitest@4.0.15))(supports-color@7.2.0)(vite@7.3.0(@types/node@25.0.3)(jiti@2.6.1))(vitest@4.0.15)
       eslint:
         specifier: ^9.39.2
         version: 9.39.2(jiti@2.6.1)(supports-color@7.2.0)
@@ -290,7 +290,7 @@ importers:
         version: 8.52.0(eslint@9.39.2(jiti@2.6.1)(supports-color@7.2.0))(supports-color@7.2.0)(typescript@5.9.3)
       vitest:
         specifier: ^4.0.15
-        version: 4.0.15(@types/node@25.0.3)(@vitest/browser-playwright@4.0.15)(jiti@2.6.1)
+        version: 4.0.15(@types/node@25.0.3)(@vitest/browser-playwright@4.0.15)(jiti@2.6.1)(vite@7.3.0(@types/node@25.0.3)(jiti@2.6.1))
 
 packages:
 
@@ -939,10 +939,10 @@ packages:
   '@types/node@25.0.3':
     resolution: {integrity: sha512-W609buLVRVmeW693xKfzHeIV6nJGGz98uCPfeXI1ELMLXVeKYZ9m15fAMSaUPBHYLGFsVRcMmSCksQOrZV9BYA==}
 
-  '@types/react-dom@19.1.6':
-    resolution: {integrity: sha512-4hOiT/dwO8Ko0gV1m/TJZYk3y0KBnY9vzDh7W+DH17b2HFSOGgdj33dhihPeuy3l0q23+4e+hoXHV6hCC4dCXw==}
+  '@types/react-dom@19.3.0':
+    resolution: {integrity: sha512-ZI7bU42mZXXKHn/qNLEw2IrbiINU7X5+vfgdixBHkCNpYWXjKgfQ/P+uyGb5CjOLB9UcnTeg3rylQtV2hym44Q==}
     peerDependencies:
-      '@types/react': ^19.0.0
+      '@types/react': ^19.3.0
 
   '@types/react@19.2.7':
     resolution: {integrity: sha512-MWtvHrGZLFttgeEj28VXHxpmwYbor/ATPYbBfSFZEIRK0ecCFLl2Qo55z52Hss+UV9CRN7trSeq1zbgx7YDWWg==}
@@ -1954,10 +1954,10 @@ packages:
   quick-format-unescaped@4.0.4:
     resolution: {integrity: sha512-tYC1Q1hgyRuHgloV/YXs2w15unPVh8qfu/qCTfhTYamaw7fyhumKa2yGpdSo87vY32rIclj+4fWYQXUMs9EHvg==}
 
-  react-dom@19.2.3:
-    resolution: {integrity: sha512-yELu4WmLPw5Mr/lmeEpox5rw3RETacE++JgHqQzd2dg+YbJuat3jH4ingc+WPZhxaoFzdv9y33G+F7Nl5O0GBg==}
+  react-dom@19.3.1:
+    resolution: {integrity: sha512-Y0bARz53lhEC1NMCASs0/j+faB/zqt3R8hpvg1e8+61ZVJ4UL0UdC4cBbXfZMcIuhrfgeILTLe+ZeBCavQPtKQ==}
     peerDependencies:
-      react: ^19.2.3
+      react: ^19.3.1
 
   react-refresh@0.18.0:
     resolution: {integrity: sha512-QgT5//D3jfjJb6Gsjxv0Slpj23ip+HtOpnNgnb2S5zU3CB26G/IDPGoy4RJB42wzFE46DRsstbW6tKHoKbhAxw==}
@@ -2022,8 +2022,8 @@ packages:
     resolution: {integrity: sha512-b3rppTKm9T+PsVCBEOUR46GWI7fdOs00VKZ1+9c1EWDaDMvjQc6tUwuFyIprgGgTcWoVHSKrU8H31ZHA2e0RHA==}
     engines: {node: '>=10'}
 
-  scheduler@0.27.0:
-    resolution: {integrity: sha512-eNv+WrVbKu1f3vbYJT/xtiF5syA5HPIMtf9IgY/nKg0sWqzAUEvqY/xm7OcZc/qafLx/iO9FgOmeSAp4v5ti/Q==}
+  scheduler@0.28.0:
+    resolution: {integrity: sha512-juorfCmIkIw8tT+p5BXSm6PJjQF/ycEYmKyzURCIt/RaZIhL+PulbQ9Yu2z1HdOJDdqDTlxA1+xKBmHXJsczAw==}
 
   secure-json-parse@4.1.0:
     resolution: {integrity: sha512-l4KnYfEyqYJxDwlNVyRfO2E4NTHfMKAWdUuA8J0yve2Dz/E/PdBepY03RvyJpssIpRFwJoCD55wA+mEDs6ByWA==}
@@ -2886,7 +2886,7 @@ snapshots:
     dependencies:
       undici-types: 7.16.0
 
-  '@types/react-dom@19.1.6(@types/react@19.2.7)':
+  '@types/react-dom@19.3.0(@types/react@19.2.7)':
     dependencies:
       '@types/react': 19.2.7
 
@@ -3054,7 +3054,7 @@ snapshots:
       '@vitest/mocker': 4.0.15(vite@7.3.0(@types/node@25.0.3)(jiti@2.6.1))
       playwright: 1.57.0
       tinyrainbow: 3.0.3
-      vitest: 4.0.15(@types/node@25.0.3)(@vitest/browser-playwright@4.0.15)(jiti@2.6.1)
+      vitest: 4.0.15(@types/node@25.0.3)(@vitest/browser-playwright@4.0.15)(jiti@2.6.1)(vite@7.3.0(@types/node@25.0.3)(jiti@2.6.1))
     transitivePeerDependencies:
       - bufferutil
       - msw
@@ -3070,7 +3070,7 @@ snapshots:
       pngjs: 7.0.0
       sirv: 3.0.2
       tinyrainbow: 3.0.3
-      vitest: 4.0.15(@types/node@25.0.3)(@vitest/browser-playwright@4.0.15)(jiti@2.6.1)
+      vitest: 4.0.15(@types/node@25.0.3)(@vitest/browser-playwright@4.0.15)(jiti@2.6.1)(vite@7.3.0(@types/node@25.0.3)(jiti@2.6.1))
       ws: 8.19.0
     transitivePeerDependencies:
       - bufferutil
@@ -3078,7 +3078,7 @@ snapshots:
       - utf-8-validate
       - vite
 
-  '@vitest/coverage-v8@4.0.15(@vitest/browser@4.0.15(vite@7.3.0(@types/node@25.0.3)(jiti@2.6.1))(vitest@4.0.15))(supports-color@7.2.0)(vitest@4.0.15)':
+  '@vitest/coverage-v8@4.0.15(@vitest/browser@4.0.15(vite@7.3.0(@types/node@25.0.3)(jiti@2.6.1))(vitest@4.0.15))(supports-color@7.2.0)(vite@7.3.0(@types/node@25.0.3)(jiti@2.6.1))(vitest@4.0.15)':
     dependencies:
       '@bcoe/v8-coverage': 1.0.2
       '@vitest/utils': 4.0.15
@@ -3091,11 +3091,12 @@ snapshots:
       obug: 2.1.1
       std-env: 3.10.0
       tinyrainbow: 3.0.3
-      vitest: 4.0.15(@types/node@25.0.3)(@vitest/browser-playwright@4.0.15)(jiti@2.6.1)
+      vitest: 4.0.15(@types/node@25.0.3)(@vitest/browser-playwright@4.0.15)(jiti@2.6.1)(vite@7.3.0(@types/node@25.0.3)(jiti@2.6.1))
     optionalDependencies:
       '@vitest/browser': 4.0.15(vite@7.3.0(@types/node@25.0.3)(jiti@2.6.1))(vitest@4.0.15)
     transitivePeerDependencies:
       - supports-color
+      - vite
 
   '@vitest/expect@4.0.15':
     dependencies:
@@ -3901,22 +3902,22 @@ snapshots:
 
   quick-format-unescaped@4.0.4: {}
 
-  react-dom@19.2.3(react@19.2.3):
+  react-dom@19.3.1(react@19.2.3):
     dependencies:
       react: 19.2.3
-      scheduler: 0.27.0
+      scheduler: 0.28.0
 
   react-refresh@0.18.0: {}
 
-  react-router@8.5.1(@types/react-dom@19.1.6(@types/react@19.2.7))(@types/react@19.2.7)(react-dom@19.2.3(react@19.2.3))(react@19.2.3):
+  react-router@8.5.1(@types/react-dom@19.3.0(@types/react@19.2.7))(@types/react@19.2.7)(react-dom@19.3.1(react@19.2.3))(react@19.2.3):
     dependencies:
       '@remix-run/route-pattern': 0.22.1
       cookie-es: 3.1.1
       react: 19.2.3
     optionalDependencies:
       '@types/react': 19.2.7
-      '@types/react-dom': 19.1.6(@types/react@19.2.7)
-      react-dom: 19.2.3(react@19.2.3)
+      '@types/react-dom': 19.3.0(@types/react@19.2.7)
+      react-dom: 19.3.1(react@19.2.3)
 
   react@19.2.3: {}
 
@@ -3971,7 +3972,7 @@ snapshots:
 
   safe-stable-stringify@2.5.0: {}
 
-  scheduler@0.27.0: {}
+  scheduler@0.28.0: {}
 
   secure-json-parse@4.1.0: {}
 
@@ -4111,16 +4112,18 @@ snapshots:
       fsevents: 2.3.3
       jiti: 2.6.1
 
-  vitest-browser-react@2.0.2(@types/react-dom@19.1.6(@types/react@19.2.7))(@types/react@19.2.7)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(vitest@4.0.15):
+  vitest-browser-react@2.0.2(@types/react-dom@19.3.0(@types/react@19.2.7))(@types/react@19.2.7)(react-dom@19.3.1(react@19.2.3))(react@19.2.3)(vite@7.3.0(@types/node@25.0.3)(jiti@2.6.1))(vitest@4.0.15):
     dependencies:
       react: 19.2.3
-      react-dom: 19.2.3(react@19.2.3)
-      vitest: 4.0.15(@types/node@25.0.3)(@vitest/browser-playwright@4.0.15)(jiti@2.6.1)
+      react-dom: 19.3.1(react@19.2.3)
+      vitest: 4.0.15(@types/node@25.0.3)(@vitest/browser-playwright@4.0.15)(jiti@2.6.1)(vite@7.3.0(@types/node@25.0.3)(jiti@2.6.1))
     optionalDependencies:
       '@types/react': 19.2.7
-      '@types/react-dom': 19.1.6(@types/react@19.2.7)
+      '@types/react-dom': 19.3.0(@types/react@19.2.7)
+    transitivePeerDependencies:
+      - vite
 
-  vitest@4.0.15(@types/node@25.0.3)(@vitest/browser-playwright@4.0.15)(jiti@2.6.1):
+  vitest@4.0.15(@types/node@25.0.3)(@vitest/browser-playwright@4.0.15)(jiti@2.6.1)(vite@7.3.0(@types/node@25.0.3)(jiti@2.6.1)):
     dependencies:
       '@vitest/expect': 4.0.15
       '@vitest/mocker': 4.0.15(vite@7.3.0(@types/node@25.0.3)(jiti@2.6.1))
@@ -4156,6 +4159,7 @@ snapshots:
       - sugarss
       - terser
       - tsx
+      - vite
       - yaml
 
   which@2.0.2:
