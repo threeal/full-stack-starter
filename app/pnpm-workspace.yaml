@@ -1,7 +1,3 @@
-packages:
-  - app
-  - server
-
 allowBuilds:
   esbuild: true
 autoInstallPeers: false

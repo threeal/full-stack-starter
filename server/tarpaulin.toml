@@ -1,0 +1,4 @@
+[coverage]
+engine = "Llvm"
+exclude-files = ["src/main.rs"]
+fail-under = 100
