@@ -1,0 +1,27 @@
+[package]
+name = "server"
+edition = "2024"
+rust-version = "1.100"
+
+[dependencies]
+axum = "0.8.9"
+tokio = { version = "1.54.1", features = ["macros", "net", "rt-multi-thread"] }
+tower-http = { version = "0.7.1", features = ["fs"] }
+
+[dev-dependencies]
+http-body-util = "0.1.5"
+tempfile = "3.27.0"
+tower = { version = "0.5.3", features = ["util"] }
+
+[lints.cargo]
+default = "deny"
+
+[lints.clippy]
+all = "deny"
+pedantic = "deny"
+nursery = "deny"
+cargo = "deny"
+
+[lints.rust]
+warnings = "deny"
+missing_docs = "deny"
