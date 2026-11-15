@@ -1,8 +1,3 @@
 .*
 !.github/
-!.gitattributes
 !.gitignore
-!.prettierignore
-!.prettierrc.json
-
-node_modules/

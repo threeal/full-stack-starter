@@ -3,21 +3,42 @@ pre-commit:
   fail_on_changes: always
   fail_on_changes_diff: true
   jobs:
-    - name: install dependencies
-      run: pnpm install
-
-    - name: check types
-      run: pnpm --recursive exec tsc
-
-    - name: fix lint
-      run: pnpm --recursive exec eslint --fix --max-warnings 0
-
-    - name: fix formatting
+    - name: app
+      root: app/
       group:
-        parallel: true
+        piped: true
         jobs:
-          - name: root project
+          - name: install dependencies
+            run: pnpm install
+
+          - name: check types
+            run: pnpm tsc
+
+          - name: fix lint
+            run: pnpm eslint --fix --max-warnings 0
+
+          - name: fix formatting
             run: pnpm prettier --write .
 
-          - name: subprojects
-            run: pnpm --recursive exec prettier --write .
+    - name: server
+      root: server/
+      group:
+        piped: true
+        jobs:
+          - name: install toolchain
+            run: rustup install
+
+          - name: check types
+            run: cargo check
+
+          - name: fix lint
+            run: cargo clippy --fix --allow-dirty
+
+          - name: check lint
+            run: cargo clippy
+
+          - name: fix formatting
+            run: cargo fmt
+
+    - name: fix formatting
+      run: dprint fmt

@@ -1,12 +1,17 @@
 version: 2
 updates:
+  - package-ecosystem: cargo
+    directory: /server
+    schedule:
+      interval: daily
+
   - package-ecosystem: github-actions
     directory: /
     schedule:
       interval: daily
 
   - package-ecosystem: npm
-    directory: /
+    directory: /app
     schedule:
       interval: daily
     cooldown:
@@ -24,3 +29,8 @@ updates:
           - vitest
           - "@vitest/coverage-v8"
           - "@vitest/browser-playwright"
+
+  - package-ecosystem: rust-toolchain
+    directory: /server
+    schedule:
+      interval: daily

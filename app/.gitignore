@@ -1,2 +1,7 @@
+!.gitattributes
+!.prettierignore
+!.prettierrc.json
+
 __screenshots__/
 dist/
+node_modules/

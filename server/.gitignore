@@ -1,1 +1,3 @@
-dist/
+!.gitattributes
+
+target/

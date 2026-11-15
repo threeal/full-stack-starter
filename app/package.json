@@ -1,11 +1,8 @@
 {
-  "name": "app",
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "vite build",
-    "prepare": "playwright install chromium --only-shell",
-    "test": "vitest run"
+    "prepare": "playwright install chromium --only-shell"
   },
   "dependencies": {
     "react": "^19.2.3",
@@ -24,6 +21,7 @@
     "@vitest/coverage-v8": "^4.0.15",
     "eslint": "^9.39.2",
     "eslint-plugin-jsdoc": "^65.4.5",
+    "jiti": "^2.7.0",
     "playwright": "^1.57.0",
     "prettier": "^3.7.4",
     "prettier-plugin-css-order": "^2.2.0",
@@ -33,5 +31,17 @@
     "vite": "^7.3.0",
     "vitest": "^4.0.15",
     "vitest-browser-react": "^2.0.2"
+  },
+  "devEngines": {
+    "packageManager": {
+      "name": "pnpm",
+      "version": "^12.18.0",
+      "onFail": "download"
+    },
+    "runtime": {
+      "name": "node",
+      "version": "^24.20.0",
+      "onFail": "download"
+    }
   }
 }
