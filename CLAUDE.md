@@ -6,9 +6,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## About This Repository
 
-A minimal full-stack starter template: a React app in `app/`, bundled with Vite, and a Rust server in `server/`, built on axum, that serves the built app from the directory in `PUBLIC_DIR`. Its only application code is placeholder pages in `app/src/pages/`, routed by `app/src/router.tsx` — real pages and server routes are added by projects derived from it.
+A minimal full-stack starter template: a React app in `app/`, bundled with Vite, and a Rust server in `server/`, built on axum, that builds the app and embeds it in its binary. Its only application code is placeholder pages in `app/src/pages/`, routed by `app/src/router.tsx` — real pages and server routes are added by projects derived from it.
 
-Each of `app/` (pnpm) and `server/` (Cargo) is a self-contained project, so run its commands from inside that directory. The root holds only repo-wide config, with dprint formatting everything outside `app/`.
+Each of `app/` (pnpm) and `server/` (Cargo) is its own project, so run its commands from inside that directory. The app only runs through the server, since `server/build.rs` builds it with pnpm on every Cargo command; running the Vite dev server on its own isn't supported. The root holds only repo-wide config, with dprint formatting everything outside `app/`.
 
 ## Gotchas
 
@@ -16,4 +16,5 @@ Each of `app/` (pnpm) and `server/` (Cargo) is a self-contained project, so run 
 - The pre-commit hook fixes files in place, and the run fails if any file changes. Report that failure and leave the fixes for the user to review and re-stage before committing again.
 - The app's Vitest 100% coverage threshold applies to the whole run, not per file — a single test file can fail on source that other tests cover, so run the full suite (`pnpm vitest run`).
 - The server's test command is `cargo tarpaulin`, not `cargo test` — only it applies the 100% coverage threshold from `server/tarpaulin.toml`.
+- `server/build.rs` reruns only when a path in its `APP_INPUTS` changes — a new app file outside those, such as another config file, must be added there or the embedded app goes stale.
 - `.gitignore` ignores every dotfile and dotdir (`.*`) — a new one needs an explicit `!` exception there or it silently won't be tracked.
