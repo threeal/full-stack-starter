@@ -1,4 +1,4 @@
-//! The server of a full-stack app, serving the app embedded in its binary.
+//! A click counter app, serving its web frontend embedded in the binary.
 
 use axum::Router;
 use axum::http::{Uri, header};
@@ -6,16 +6,16 @@ use axum::response::{Html, IntoResponse, Response};
 use axum::routing::get;
 use include_dir::{Dir, File, include_dir};
 
-/// The built app, embedded from where the build script builds it.
-static APP: Dir<'static> = include_dir!("$OUT_DIR/app");
+/// The built web frontend, embedded from where the build script builds it.
+static WEB: Dir<'static> = include_dir!("$OUT_DIR/web");
 
-/// The app's `index.html`, served for paths without a matching file.
-const INDEX: &[u8] = include_bytes!(concat!(env!("OUT_DIR"), "/app/index.html"));
+/// The web frontend's `index.html`, served for paths without a matching file.
+const INDEX: &[u8] = include_bytes!(concat!(env!("OUT_DIR"), "/web/index.html"));
 
-/// Creates the router that serves the embedded app.
+/// Creates the router that serves the embedded web frontend.
 ///
-/// Requests for paths without a matching file fall back to the app's
-/// `index.html`, so the app's client-side router handles them, including
+/// Requests for paths without a matching file fall back to the web
+/// frontend's `index.html`, so its client-side router handles them, including
 /// unknown paths.
 pub fn router() -> Router {
     Router::new().fallback_service(get(serve))
@@ -24,7 +24,7 @@ pub fn router() -> Router {
 /// Serves the embedded file at the request's path, or `index.html` if there's
 /// none.
 async fn serve(uri: Uri) -> Response {
-    APP.get_file(uri.path().trim_start_matches('/'))
+    WEB.get_file(uri.path().trim_start_matches('/'))
         .map_or_else(|| Html(INDEX).into_response(), file_response)
 }
 
@@ -58,7 +58,7 @@ mod tests {
     #[tokio::test]
     async fn serve_existing_file() {
         let response = get("/react.svg").await;
-        let file = APP.get_file("react.svg").unwrap();
+        let file = WEB.get_file("react.svg").unwrap();
         assert_eq!(
             response,
             (

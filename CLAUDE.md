@@ -6,15 +6,15 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## About This Repository
 
-A minimal full-stack starter template: a React app in `app/`, bundled with Vite, and a Rust server in `server/`, built on axum, that builds the app and embeds it in its binary. Its only application code is placeholder pages in `app/src/pages/`, routed by `app/src/router.tsx` — real pages and server routes are added by projects derived from it.
+A minimal full-stack starter template: a Rust app at the root, built on axum, that builds the React web frontend in `web/`, bundled with Vite, and embeds it in its binary. Its only application code is an example click counter: placeholder pages in `web/src/pages/`, routed by `web/src/router.tsx` — real pages and server routes are added by projects derived from it.
 
-Each of `app/` (pnpm) and `server/` (Cargo) is its own project, so run its commands from inside that directory. The app only runs through the server, since `server/build.rs` builds it with pnpm on every Cargo command; running the Vite dev server on its own isn't supported. The root holds only repo-wide config, with dprint formatting everything outside `app/`.
+Run Cargo commands from the root and pnpm commands from inside `web/`. The web frontend only runs through the root app, since `build.rs` builds it with pnpm on every Cargo command; running the Vite dev server on its own isn't supported. dprint formats everything outside `web/`, which Prettier formats instead.
 
 ## Gotchas
 
 - `lefthook run pre-commit` skips every job when nothing is staged, even ones that ignore the staged file list — pass `--all-files` to run it outside an actual commit.
 - The pre-commit hook fixes files in place, and the run fails if any file changes. Report that failure and leave the fixes for the user to review and re-stage before committing again.
-- The app's Vitest 100% coverage threshold applies to the whole run, not per file — a single test file can fail on source that other tests cover, so run the full suite (`pnpm vitest run`).
-- The server's test command is `cargo tarpaulin`, not `cargo test` — only it applies the 100% coverage threshold from `server/tarpaulin.toml`.
-- `server/build.rs` reruns only when a path in its `APP_INPUTS` changes — a new app file outside those, such as another config file, must be added there or the embedded app goes stale.
+- The web frontend's Vitest 100% coverage threshold applies to the whole run, not per file — a single test file can fail on source that other tests cover, so run the full suite (`pnpm vitest run`).
+- The root's test command is `cargo tarpaulin`, not `cargo test` — only it applies the 100% coverage threshold from `tarpaulin.toml`.
+- `build.rs` reruns only when a path in its `WEB_INPUTS` changes — a new file in `web/` outside those, such as another config file, must be added there or the embedded web frontend goes stale.
 - `.gitignore` ignores every dotfile and dotdir (`.*`) — a new one needs an explicit `!` exception there or it silently won't be tracked.
