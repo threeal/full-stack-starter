@@ -3,8 +3,8 @@ pre-commit:
   fail_on_changes: always
   fail_on_changes_diff: true
   jobs:
-    - name: app
-      root: app/
+    - name: web
+      root: web/
       group:
         piped: true
         jobs:
@@ -20,25 +20,20 @@ pre-commit:
           - name: fix formatting
             run: pnpm prettier --write .
 
-    - name: server
-      root: server/
-      group:
-        piped: true
-        jobs:
-          - name: install toolchain
-            run: rustup install
+    - name: install toolchain
+      run: rustup install
 
-          - name: check types
-            run: cargo check
+    - name: check types
+      run: cargo check
 
-          - name: fix lint
-            run: cargo clippy --fix --allow-dirty
+    - name: fix lint
+      run: cargo clippy --fix --allow-dirty
 
-          - name: check lint
-            run: cargo clippy
+    - name: check lint
+      run: cargo clippy
 
-          - name: fix formatting
-            run: cargo fmt
+    - name: fix rust formatting
+      run: cargo fmt
 
     - name: fix formatting
       run: dprint fmt

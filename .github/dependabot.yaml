@@ -1,7 +1,7 @@
 version: 2
 updates:
   - package-ecosystem: cargo
-    directory: /server
+    directory: /
     schedule:
       interval: daily
 
@@ -11,7 +11,7 @@ updates:
       interval: daily
 
   - package-ecosystem: npm
-    directory: /app
+    directory: /web
     schedule:
       interval: daily
     cooldown:
@@ -31,6 +31,6 @@ updates:
           - "@vitest/browser-playwright"
 
   - package-ecosystem: rust-toolchain
-    directory: /server
+    directory: /
     schedule:
       interval: daily
