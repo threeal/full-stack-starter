@@ -74,6 +74,7 @@ dependencies = [
  "http-body-util",
  "include_dir",
  "mime_guess",
+ "serde_json",
  "tokio",
  "tower",
 ]

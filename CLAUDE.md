@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## About This Repository
 
-A minimal full-stack starter template: a Rust app at the root, built on axum, that builds the React web frontend in `web/`, bundled with Vite, and embeds it in its binary. Its only application code is an example click counter: placeholder pages in `web/src/pages/`, routed by `web/src/router.tsx` — real pages and server routes are added by projects derived from it.
+A minimal full-stack starter template: a Rust app at the root, built on axum, that builds the React web frontend in `web/`, bundled with Vite, and embeds it in its binary. Its only application code is an example click counter: an in-memory counter API under `/api` in `src/lib.rs`, and placeholder pages in `web/src/pages/` that call it, routed by `web/src/router.tsx` — real pages and server routes are added by projects derived from it.
 
 Run Cargo commands from the root and pnpm commands from inside `web/`. The web frontend only runs through the root app, since `build.rs` builds it with pnpm on every Cargo command; running the Vite dev server on its own isn't supported. dprint formats everything outside `web/`, which Prettier formats instead.
 
