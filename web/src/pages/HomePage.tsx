@@ -1,6 +1,6 @@
 import Button from "../components/Button.tsx";
 import Description from "../components/Description.tsx";
-import { getSocket, useSynced } from "../socket.ts";
+import { useClient, useSynced } from "../live/index.ts";
 
 /**
  * Renders the home page, with a button that shows the server's synced count
@@ -8,6 +8,7 @@ import { getSocket, useSynced } from "../socket.ts";
  * @returns The home page content.
  */
 export default function HomePage() {
+  const client = useClient();
   const count = useSynced("counter") as number | undefined;
   return (
     <>
@@ -15,7 +16,7 @@ export default function HomePage() {
       <Button
         disabled={count === undefined}
         onClick={() => {
-          void getSocket().call("counter.increment");
+          void client.call("counter.increment");
         }}
       >
         count is {count ?? "…"}
