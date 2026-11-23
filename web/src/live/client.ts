@@ -1,20 +1,16 @@
-import { useCallback, useSyncExternalStore } from "react";
+import type { ClientMessage, ServerMessage } from "./protocol.ts";
 
-/** A message the client sends to the server. */
-type ClientMessage =
-  | { type: "call"; id: number; method: string; params: unknown }
-  | { type: "subscribe"; key: string }
-  | { type: "unsubscribe"; key: string };
+/** A way for a client to send messages to the server. */
+export interface Transport {
+  /** Sends a message to the server. */
+  send: (message: ClientMessage) => void;
+}
 
-/** A message the server sends to the client. */
-type ServerMessage =
-  | { type: "result"; id: number; value: unknown }
-  | { type: "error"; id: number; code: string; message: string }
-  | { type: "sync"; key: string; version: number; value: unknown }
-  | { type: "sync_error"; key: string; code: string; message: string };
+/** Connects a client to the server, delivering the server's messages to `receive`. */
+export type Connect = (receive: (message: ServerMessage) => void) => Transport;
 
 /** An error the server replied with to a call or a subscription. */
-export class SocketError extends Error {
+export class LiveError extends Error {
   /** A machine-readable code identifying the kind of error. */
   readonly code: string;
 
@@ -31,40 +27,33 @@ export class SocketError extends Error {
 /** A call waiting for its reply. */
 interface PendingCall {
   resolve: (value: unknown) => void;
-  reject: (error: SocketError) => void;
+  reject: (error: LiveError) => void;
 }
 
 /** A synced object's subscription, shared by all of its listeners. */
 interface Subscription {
   listeners: Set<() => void>;
   value?: unknown;
-  error?: SocketError;
+  error?: LiveError;
 }
 
-/** A WebSocket connection to the server, for calls and synced objects. */
-export class Socket {
-  readonly #webSocket: WebSocket;
-  readonly #opened: Promise<void>;
+/**
+ * A client of the server's calls and synced objects, independent of how its
+ * messages are transported.
+ */
+export class Client {
+  readonly #transport: Transport;
   readonly #calls = new Map<number, PendingCall>();
   readonly #subscriptions = new Map<string, Subscription>();
   #nextCallId = 0;
 
   /**
-   * @param url - The URL of the server's WebSocket.
+   * @param connect - Connects the client to the server.
    */
-  constructor(url: string) {
-    this.#webSocket = new WebSocket(url);
-    this.#opened = new Promise((resolve) => {
-      this.#webSocket.addEventListener("open", () => {
-        resolve();
-      });
+  constructor(connect: Connect) {
+    this.#transport = connect((message) => {
+      this.#receive(message);
     });
-    this.#webSocket.addEventListener(
-      "message",
-      (event: MessageEvent<string>) => {
-        this.#receive(JSON.parse(event.data) as ServerMessage);
-      },
-    );
   }
 
   /**
@@ -78,7 +67,7 @@ export class Socket {
     const id = this.#nextCallId++;
     return new Promise((resolve, reject) => {
       this.#calls.set(id, { resolve, reject });
-      this.#send({ type: "call", id, method, params });
+      this.#transport.send({ type: "call", id, method, params });
     });
   }
 
@@ -97,13 +86,13 @@ export class Socket {
       subscription.listeners.delete(listener);
       if (subscription.listeners.size === 0) {
         this.#subscriptions.delete(key);
-        this.#send({ type: "unsubscribe", key });
+        this.#transport.send({ type: "unsubscribe", key });
       }
     };
   }
 
   /**
-   * Returns the latest value of a subscribed synced object.
+   * Returns the latest whole value of a subscribed synced object.
    * @param key - The synced object's key.
    * @returns The latest value, or `undefined` if none has arrived yet.
    * @throws The server's error if it rejected the subscription.
@@ -117,14 +106,8 @@ export class Socket {
   #addSubscription(key: string): Subscription {
     const subscription = { listeners: new Set<() => void>() };
     this.#subscriptions.set(key, subscription);
-    this.#send({ type: "subscribe", key });
+    this.#transport.send({ type: "subscribe", key });
     return subscription;
-  }
-
-  #send(message: ClientMessage): void {
-    void this.#opened.then(() => {
-      this.#webSocket.send(JSON.stringify(message));
-    });
   }
 
   #receive(message: ServerMessage): void {
@@ -134,7 +117,7 @@ export class Socket {
         break;
       case "error":
         this.#takeCall(message.id)?.reject(
-          new SocketError(message.code, message.message),
+          new LiveError(message.code, message.message),
         );
         break;
       case "sync":
@@ -142,7 +125,7 @@ export class Socket {
         break;
       case "sync_error":
         this.#updateSubscription(message.key, {
-          error: new SocketError(message.code, message.message),
+          error: new LiveError(message.code, message.message),
         });
         break;
     }
@@ -163,30 +146,4 @@ export class Socket {
     Object.assign(subscription, update);
     for (const listener of subscription.listeners) listener();
   }
-}
-
-let pageSocket: Socket | undefined;
-
-/**
- * Returns the page's connection to the server, connecting on first use.
- * @returns The page's socket.
- */
-export function getSocket(): Socket {
-  pageSocket ??= new Socket("/api/ws");
-  return pageSocket;
-}
-
-/**
- * Returns the latest value of a synced object, subscribing to it while the
- * component is mounted.
- * @param key - The synced object's key.
- * @returns The latest value, or `undefined` until the first one arrives.
- */
-export function useSynced(key: string): unknown {
-  const socket = getSocket();
-  const subscribe = useCallback(
-    (onChange: () => void) => socket.subscribe(key, onChange),
-    [socket, key],
-  );
-  return useSyncExternalStore(subscribe, () => socket.value(key));
 }
