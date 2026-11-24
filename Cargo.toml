@@ -15,7 +15,7 @@ tokio-stream = { version = "0.1.19", default-features = false, features = ["sync
 
 [dev-dependencies]
 http-body-util = "0.1.5"
-tokio-tungstenite = "0.29.0"
+tokio-tungstenite = "0.30.0"
 tower = { version = "0.5.3", features = ["util"] }
 
 [lints.cargo]
