@@ -1,7 +1,7 @@
 import { createContext, use, useCallback, useSyncExternalStore } from "react";
 import type { Client } from "./client.ts";
 
-/** Provides the page's client to {@link useClient} and {@link useSynced}. */
+/** Provides the page's client to {@link useClient} and the hooks that use it. */
 export const ClientContext = createContext<Client | undefined>(undefined);
 
 /**
@@ -30,4 +30,17 @@ export function useSynced(key: string): unknown {
     [client, key],
   );
   return useSyncExternalStore(subscribe, () => client.value(key));
+}
+
+/**
+ * Returns whether the connection to the server is open, updating as it opens
+ * and closes.
+ * @returns Whether the connection is open.
+ */
+export function useConnected(): boolean {
+  const client = useClient();
+  return useSyncExternalStore(
+    client.subscribeConnection,
+    () => client.connected,
+  );
 }
