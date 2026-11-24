@@ -3,12 +3,14 @@ import { Client, LiveError } from "./client.ts";
 import { FakeConnection } from "./testing.ts";
 
 /**
- * Creates a client connected to a fake connection.
+ * Creates a client connected to an open fake connection.
  * @returns The fake connection and the client connected to it.
  */
 function connect() {
   const connection = new FakeConnection();
-  return { connection, client: new Client(connection.connect) };
+  const client = new Client(connection.connect);
+  connection.open();
+  return { connection, client };
 }
 
 describe("Client", { concurrent: true }, () => {
@@ -81,5 +83,68 @@ describe("Client", { concurrent: true }, () => {
     });
     expect(listener).toHaveBeenCalledOnce();
     expect(() => client.value("a")).toThrow(LiveError);
+  });
+
+  test("sends calls and subscriptions once connected", ({ expect }) => {
+    const connection = new FakeConnection();
+    const client = new Client(connection.connect);
+    void client.call("a");
+    client.subscribe("b", vi.fn());
+    client.subscribe("c", vi.fn())();
+    expect(connection.sent).toEqual([]);
+    connection.open();
+    expect(connection.sent).toEqual([
+      { type: "subscribe", key: "b" },
+      { type: "call", id: 0, method: "a" },
+    ]);
+  });
+
+  test("tells whether it is connected", ({ expect }) => {
+    const connection = new FakeConnection();
+    const client = new Client(connection.connect);
+    const listener = vi.fn();
+    const unsubscribe = client.subscribeConnection(listener);
+    expect(client.connected).toBe(false);
+    connection.open();
+    expect(client.connected).toBe(true);
+    connection.close();
+    expect(client.connected).toBe(false);
+    expect(listener).toHaveBeenCalledTimes(2);
+    unsubscribe();
+    connection.open();
+    expect(listener).toHaveBeenCalledTimes(2);
+  });
+
+  test("rejects calls cut off by a disconnect", async ({ expect }) => {
+    const { connection, client } = connect();
+    const result = client.call("a");
+    connection.close();
+    await expect(result).rejects.toMatchObject({ code: "disconnected" });
+    connection.open();
+    expect(connection.sent).toEqual([{ type: "call", id: 0, method: "a" }]);
+  });
+
+  test("ignores a close while disconnected", ({ expect }) => {
+    const connection = new FakeConnection();
+    const client = new Client(connection.connect);
+    const listener = vi.fn();
+    client.subscribeConnection(listener);
+    connection.close();
+    expect(listener).not.toHaveBeenCalled();
+  });
+
+  test("resubscribes on reconnect, keeping the last value", ({ expect }) => {
+    const { connection, client } = connect();
+    client.subscribe("a", vi.fn());
+    connection.receive({ type: "sync", key: "a", version: 3, value: 1 });
+    connection.close();
+    expect(client.value("a")).toBe(1);
+    connection.open();
+    expect(connection.sent).toEqual([
+      { type: "subscribe", key: "a" },
+      { type: "subscribe", key: "a" },
+    ]);
+    connection.receive({ type: "sync", key: "a", version: 0, value: 2 });
+    expect(client.value("a")).toBe(2);
   });
 });

@@ -1,4 +1,4 @@
-import type { Connect } from "./client.ts";
+import type { Connect, Receiver } from "./client.ts";
 import type { ClientMessage, ServerMessage } from "./protocol.ts";
 
 /**
@@ -9,15 +9,17 @@ export class FakeConnection {
   /** The messages the client sent, in order. */
   readonly sent: ClientMessage[] = [];
 
-  readonly #receivers: ((message: ServerMessage) => void)[] = [];
+  readonly #receivers: Receiver[] = [];
 
   /**
-   * Connects a client to this fake connection.
-   * @param receive - Receives the messages delivered by {@link FakeConnection.receive}.
+   * Connects a client to this fake connection, closed until
+   * {@link FakeConnection.open} is called.
+   * @param receiver - Told what {@link FakeConnection.receive},
+   * {@link FakeConnection.open}, and {@link FakeConnection.close} do.
    * @returns A transport that records what the client sends.
    */
-  readonly connect: Connect = (receive) => {
-    this.#receivers.push(receive);
+  readonly connect: Connect = (receiver) => {
+    this.#receivers.push(receiver);
     return {
       send: (message) => {
         this.sent.push(message);
@@ -30,6 +32,16 @@ export class FakeConnection {
    * @param message - The message to deliver.
    */
   receive(message: ServerMessage): void {
-    for (const receive of this.#receivers) receive(message);
+    for (const receiver of this.#receivers) receiver.receive(message);
+  }
+
+  /** Opens the connection, or reopens it after closing. */
+  open(): void {
+    for (const receiver of this.#receivers) receiver.open();
+  }
+
+  /** Closes the connection. */
+  close(): void {
+    for (const receiver of this.#receivers) receiver.close();
   }
 }

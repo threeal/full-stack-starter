@@ -2,12 +2,22 @@ import type { ClientMessage, ServerMessage } from "./protocol.ts";
 
 /** A way for a client to send messages to the server. */
 export interface Transport {
-  /** Sends a message to the server. */
+  /** Sends a message to the server, only called while the connection is open. */
   send: (message: ClientMessage) => void;
 }
 
-/** Connects a client to the server, delivering the server's messages to `receive`. */
-export type Connect = (receive: (message: ServerMessage) => void) => Transport;
+/** What a connection tells the client about the server. */
+export interface Receiver {
+  /** Delivers a message from the server. */
+  receive: (message: ServerMessage) => void;
+  /** Tells that the connection opened, or reopened after closing. */
+  open: () => void;
+  /** Tells that the connection closed. */
+  close: () => void;
+}
+
+/** Connects a client to the server, telling `receiver` what happens on it. */
+export type Connect = (receiver: Receiver) => Transport;
 
 /** An error the server replied with to a call or a subscription. */
 export class LiveError extends Error {
@@ -26,6 +36,7 @@ export class LiveError extends Error {
 
 /** A call waiting for its reply. */
 interface PendingCall {
+  message: ClientMessage;
   resolve: (value: unknown) => void;
   reject: (error: LiveError) => void;
 }
@@ -40,34 +51,71 @@ interface Subscription {
 /**
  * A client of the server's calls and synced objects, independent of how its
  * messages are transported.
+ *
+ * Calls made while disconnected wait for the connection to open. Calls cut
+ * off by a disconnect reject with the code `"disconnected"` instead of being
+ * retried, since the server may already have run them. Subscriptions are
+ * sent again on every reopen, keeping their last value in the meantime.
  */
 export class Client {
   readonly #transport: Transport;
   readonly #calls = new Map<number, PendingCall>();
   readonly #subscriptions = new Map<string, Subscription>();
+  readonly #connectionListeners = new Set<() => void>();
+  #connected = false;
   #nextCallId = 0;
 
   /**
    * @param connect - Connects the client to the server.
    */
   constructor(connect: Connect) {
-    this.#transport = connect((message) => {
-      this.#receive(message);
+    this.#transport = connect({
+      receive: (message) => {
+        this.#receive(message);
+      },
+      open: () => {
+        this.#open();
+      },
+      close: () => {
+        this.#close();
+      },
     });
   }
 
   /**
-   * Calls a method on the server.
+   * Whether the connection to the server is open.
+   * @returns Whether the connection is open.
+   */
+  get connected(): boolean {
+    return this.#connected;
+  }
+
+  /**
+   * Listens to the connection opening and closing.
+   * @param listener - Called whenever {@link Client.connected} changes.
+   * @returns A function that removes the listener.
+   */
+  readonly subscribeConnection = (listener: () => void): (() => void) => {
+    this.#connectionListeners.add(listener);
+    return () => {
+      this.#connectionListeners.delete(listener);
+    };
+  };
+
+  /**
+   * Calls a method on the server, once the connection is open.
    * @param method - The name of the method.
    * @param params - The method's parameters.
    * @returns A promise that resolves to the call's result, or rejects with
-   * the server's error.
+   * the server's error, or with the code `"disconnected"` if the connection
+   * closed before the reply.
    */
   call(method: string, params?: unknown): Promise<unknown> {
     const id = this.#nextCallId++;
     return new Promise((resolve, reject) => {
-      this.#calls.set(id, { resolve, reject });
-      this.#transport.send({ type: "call", id, method, params });
+      const message: ClientMessage = { type: "call", id, method, params };
+      this.#calls.set(id, { message, resolve, reject });
+      this.#send(message);
     });
   }
 
@@ -86,7 +134,7 @@ export class Client {
       subscription.listeners.delete(listener);
       if (subscription.listeners.size === 0) {
         this.#subscriptions.delete(key);
-        this.#transport.send({ type: "unsubscribe", key });
+        this.#send({ type: "unsubscribe", key });
       }
     };
   }
@@ -106,8 +154,36 @@ export class Client {
   #addSubscription(key: string): Subscription {
     const subscription = { listeners: new Set<() => void>() };
     this.#subscriptions.set(key, subscription);
-    this.#transport.send({ type: "subscribe", key });
+    this.#send({ type: "subscribe", key });
     return subscription;
+  }
+
+  #send(message: ClientMessage): void {
+    if (this.#connected) this.#transport.send(message);
+  }
+
+  #open(): void {
+    this.#setConnected(true);
+    for (const key of this.#subscriptions.keys()) {
+      this.#transport.send({ type: "subscribe", key });
+    }
+    for (const call of this.#calls.values()) {
+      this.#transport.send(call.message);
+    }
+  }
+
+  #close(): void {
+    if (!this.#connected) return;
+    this.#setConnected(false);
+    for (const [id, call] of this.#calls) {
+      this.#calls.delete(id);
+      call.reject(new LiveError("disconnected", "the connection closed"));
+    }
+  }
+
+  #setConnected(connected: boolean): void {
+    this.#connected = connected;
+    for (const listener of this.#connectionListeners) listener();
   }
 
   #receive(message: ServerMessage): void {

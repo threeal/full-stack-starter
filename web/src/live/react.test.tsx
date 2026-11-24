@@ -1,7 +1,7 @@
 import { describe, expect, test } from "vitest";
 import { render } from "vitest-browser-react";
 import { Client } from "./client.ts";
-import { ClientContext, useClient, useSynced } from "./react.ts";
+import { ClientContext, useClient, useConnected, useSynced } from "./react.ts";
 import { FakeConnection } from "./testing.ts";
 
 /**
@@ -10,6 +10,14 @@ import { FakeConnection } from "./testing.ts";
  */
 function SyncedValue() {
   return <p>value is {String(useSynced("a"))}</p>;
+}
+
+/**
+ * Renders whether the client is connected.
+ * @returns Whether it is connected, as text.
+ */
+function Connected() {
+  return <p>connected is {String(useConnected())}</p>;
 }
 
 /**
@@ -30,6 +38,7 @@ describe("useSynced", () => {
   test("subscribes while mounted and returns the latest value", async () => {
     const connection = new FakeConnection();
     const client = new Client(connection.connect);
+    connection.open();
     const screen = await render(
       <ClientContext value={client}>
         <SyncedValue />
@@ -44,6 +53,21 @@ describe("useSynced", () => {
       { type: "subscribe", key: "a" },
       { type: "unsubscribe", key: "a" },
     ]);
+  });
+});
+
+describe("useConnected", () => {
+  test("returns whether the client is connected", async () => {
+    const connection = new FakeConnection();
+    const client = new Client(connection.connect);
+    const screen = await render(
+      <ClientContext value={client}>
+        <Connected />
+      </ClientContext>,
+    );
+    await expect.element(screen.getByText("connected is false")).toBeVisible();
+    connection.open();
+    await expect.element(screen.getByText("connected is true")).toBeVisible();
   });
 });
 

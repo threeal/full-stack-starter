@@ -7,6 +7,7 @@ import HomePage from "./HomePage.tsx";
 test("counter button shows and increments the synced count", async () => {
   const connection = new FakeConnection();
   const client = new Client(connection.connect);
+  connection.open();
   const screen = await render(
     <ClientContext value={client}>
       <HomePage />
@@ -27,4 +28,20 @@ test("counter button shows and increments the synced count", async () => {
   connection.receive({ type: "sync", key: "counter", version: 1, value: 2 });
   connection.receive({ type: "result", id: 0, value: null });
   await expect.element(screen.getByText("count is 2")).toBeVisible();
+});
+
+test("counter button is disabled while disconnected", async () => {
+  const connection = new FakeConnection();
+  const client = new Client(connection.connect);
+  connection.open();
+  const screen = await render(
+    <ClientContext value={client}>
+      <HomePage />
+    </ClientContext>,
+  );
+  connection.receive({ type: "sync", key: "counter", version: 0, value: 1 });
+  const button = screen.getByRole("button", { name: "count is 1" });
+  await expect.element(button).toBeEnabled();
+  connection.close();
+  await expect.element(button).toBeDisabled();
 });
